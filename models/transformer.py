@@ -152,6 +152,7 @@ class YabguTransformer(nn.Module):
         self,
         input_ids: torch.Tensor,
         targets: Optional[torch.Tensor] = None,
+        ignore_index: int = -100,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
         bsz, seqlen = input_ids.shape
         assert seqlen <= self.config.max_seq_len, f"Контекст шегінен асты: {seqlen} > {self.config.max_seq_len}"
@@ -171,7 +172,7 @@ class YabguTransformer(nn.Module):
             loss = F.cross_entropy(
                 logits.view(-1, self.vocab_size),
                 targets.view(-1),
-                ignore_index=-1
+                ignore_index=ignore_index
             )
 
         return logits, loss

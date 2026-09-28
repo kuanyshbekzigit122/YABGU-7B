@@ -1,6 +1,14 @@
 import sys
+import os
 import subprocess
 import time
+
+if sys.platform.startswith("win"):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 
 def run_with_retry(script_path, timeout=900, max_retries=3):
     cmd = [
@@ -9,9 +17,13 @@ def run_with_retry(script_path, timeout=900, max_retries=3):
         "--timeout", str(float(timeout)),
         "-f", script_path
     ]
+    env = os.environ.copy()
+    env["PYTHONUTF8"] = "1"
+    env["PYTHONIOENCODING"] = "utf-8"
+    
     for attempt in range(1, max_retries + 1):
         print(f"\n[RUNNER] Attempt {attempt}/{max_retries}: Running '{script_path}' on Colab session 'yabgu'...")
-        res = subprocess.run(cmd)
+        res = subprocess.run(cmd, env=env)
         if res.returncode == 0:
             print(f"[RUNNER] Successfully finished '{script_path}' (Exit Code: 0)")
             return 0
