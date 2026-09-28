@@ -32,8 +32,11 @@ def generate_text(
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Құрылғы (Device): {device.upper()}")
     
-    if checkpoint_path == "checkpoints/checkpoint_last.pt" and os.path.exists("checkpoints/checkpoint_colab_1500.pt"):
-        checkpoint_path = "checkpoints/checkpoint_colab_1500.pt"
+    if checkpoint_path == "checkpoints/checkpoint_last.pt":
+        for cp in ["checkpoints/yabgu_50m_scale3000_fp16.pt", "checkpoints/checkpoint_colab_1500.pt"]:
+            if os.path.exists(cp):
+                checkpoint_path = cp
+                break
 
     if not os.path.exists(checkpoint_path):
         print(f"[ҚАТЕ] Checkpoint файлы табылмады: {checkpoint_path}")

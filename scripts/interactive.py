@@ -24,6 +24,7 @@ from models.transformer import YabguTransformer
 def start_interactive_session():
     # Ең соңғы checkpoint-ті таңдау
     ckpt_paths = [
+        "checkpoints/yabgu_50m_scale3000_fp16.pt",
         "checkpoints/checkpoint_colab_1500.pt",
         "checkpoints/checkpoint_colab_last.pt",
         "checkpoints/checkpoint_last.pt"
